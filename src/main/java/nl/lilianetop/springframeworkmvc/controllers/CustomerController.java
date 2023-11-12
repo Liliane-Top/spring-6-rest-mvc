@@ -4,10 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import nl.lilianetop.springframeworkmvc.models.Customer;
 import nl.lilianetop.springframeworkmvc.services.CustomerService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
@@ -29,6 +29,14 @@ public class CustomerController {
     public Customer getCustomerById(@PathVariable(value = "customerId") UUID customerId){
         log.debug("Get Customer by id - in controller");
         return service.getCustomerById(customerId);
+    }
+
+    @PostMapping
+    public ResponseEntity<Customer> createAndSaveCustomer(@RequestBody Customer newCustomer){
+        Customer savedCustomer = service.createAndSaveCustomer(newCustomer);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("location", "api/v1/customer/" + savedCustomer.getId().toString());
+        return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
 
 
