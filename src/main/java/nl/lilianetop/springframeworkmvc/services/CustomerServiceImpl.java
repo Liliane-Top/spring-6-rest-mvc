@@ -3,6 +3,7 @@ package nl.lilianetop.springframeworkmvc.services;
 import lombok.extern.slf4j.Slf4j;
 import nl.lilianetop.springframeworkmvc.models.Customer;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -84,5 +85,14 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public void deleteCustomerById(UUID id) {
         customerMap.remove(id);
+    }
+
+    @Override
+    public void patchCustomerById(UUID id, Customer customer) {
+        Customer existing = customerMap.get(id);
+
+        if(StringUtils.hasText( customer.getCustomerName())) {
+            existing.setCustomerName(customer.getCustomerName());
+        }
     }
 }
