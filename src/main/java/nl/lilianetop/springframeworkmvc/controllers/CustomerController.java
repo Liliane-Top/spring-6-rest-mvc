@@ -38,6 +38,11 @@ public class CustomerController {
         headers.add("location", "api/v1/customer/" + savedCustomer.getId().toString());
         return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
+    @PutMapping(value = {"{customerId}"})
+    public ResponseEntity<Customer> updateCustomer(@PathVariable("customerId") UUID id, @RequestBody Customer customer){
+        service.updateCustomer(id, customer);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 
 
 }
