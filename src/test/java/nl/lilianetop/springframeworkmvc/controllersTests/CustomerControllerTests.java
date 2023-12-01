@@ -5,6 +5,7 @@ import nl.lilianetop.springframeworkmvc.controllers.CustomerController;
 import nl.lilianetop.springframeworkmvc.models.Customer;
 import nl.lilianetop.springframeworkmvc.services.CustomerService;
 import nl.lilianetop.springframeworkmvc.services.CustomerServiceImpl;
+import nl.lilianetop.springframeworkmvc.utils.Constants;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -58,7 +59,7 @@ public class CustomerControllerTests {
     void call_listCustomers() throws Exception {
         given(service.listCustomers()).willReturn(customerService.listCustomers());
 
-        mockMvc.perform(get("/api/v1/customer")
+        mockMvc.perform(get(Constants.CUSTOMER_URL)
         .accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -73,7 +74,7 @@ public class CustomerControllerTests {
 
         given(service.getCustomerById(testCustomer.getId())).willReturn(testCustomer);
 
-        mockMvc.perform(get("/api/v1/customer/" + testCustomer.getId())
+        mockMvc.perform(get(Constants.CUSTOMER_URL_ID, testCustomer.getId())
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -89,7 +90,7 @@ public class CustomerControllerTests {
 
         given(service.createAndSaveCustomer(any(Customer.class))).willReturn(customerService.listCustomers().get(1));
 
-        mockMvc.perform(post("/api/v1/customer")
+        mockMvc.perform(post(Constants.CUSTOMER_URL)
                 .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(testCustomer)))
@@ -101,7 +102,7 @@ public class CustomerControllerTests {
     @Test
     void call_updateCustomer() throws Exception {
         Customer testCustomer = customerService.listCustomers().get(0);
-        mockMvc.perform(put("/api/v1/customer/" + testCustomer.getId())
+        mockMvc.perform(put(Constants.CUSTOMER_URL_ID, testCustomer.getId())
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(testCustomer)))
@@ -119,11 +120,11 @@ public class CustomerControllerTests {
 
         Map<String, Object> updatedMap = new HashMap<>();
         //The key of this map MUST be exactly the same as the field you want to update.
-        //I want to update Customer's name which fiels is called 'customerName'
+        //I want to update Customer's name which field is called 'customerName'
         //jackson creates a json from this map which will be used as body of the request.
         updatedMap.put("customerName", "updated name");
 
-        mockMvc.perform(patch("/api/v1/customer/" + testCustomer.getId())
+        mockMvc.perform(patch(Constants.CUSTOMER_URL_ID, testCustomer.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(updatedMap)))
@@ -141,7 +142,7 @@ public class CustomerControllerTests {
     void call_deleteCustomer() throws Exception{
         Customer testCustomer = customerService.listCustomers().get(0);
 
-        mockMvc.perform(delete("/api/v1/customer/" + testCustomer.getId())
+        mockMvc.perform(delete(Constants.CUSTOMER_URL_ID, testCustomer.getId())
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
 
@@ -153,6 +154,5 @@ public class CustomerControllerTests {
 
         assertThat(uuidArgumentCaptor.getValue()).isEqualTo(testCustomer.getId());
     }
-
 
 }
