@@ -45,9 +45,6 @@ public class CustomerServiceImpl implements CustomerService {
         customerMap.put(customer1.getId(), customer1);
         customerMap.put(customer2.getId(), customer2);
         customerMap.put(customer3.getId(), customer3);
-
-
-
     }
 
     @Override

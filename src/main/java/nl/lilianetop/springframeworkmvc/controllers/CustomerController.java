@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import nl.lilianetop.springframeworkmvc.models.Customer;
 import nl.lilianetop.springframeworkmvc.services.CustomerService;
+import nl.lilianetop.springframeworkmvc.utils.Constants;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,48 +14,46 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(value = "/api/v1/customer")
 @AllArgsConstructor
 @Slf4j
 public class CustomerController {
 
     private final CustomerService service;
 
-    @GetMapping()
+    @GetMapping(value = Constants.CUSTOMER_URL)
     public List<Customer> customerList(){
         return service.listCustomers();
     }
 
-    @GetMapping(value = "{customerId}")
+    @GetMapping(value = Constants.CUSTOMER_URL_ID)
     public Customer getCustomerById(@PathVariable(value = "customerId") UUID customerId){
         log.debug("Get Customer by id - in controller");
         return service.getCustomerById(customerId);
     }
 
-    @PostMapping
+    @PostMapping(value = Constants.CUSTOMER_URL)
     public ResponseEntity<Customer> createAndSaveCustomer(@RequestBody Customer newCustomer){
         Customer savedCustomer = service.createAndSaveCustomer(newCustomer);
         HttpHeaders headers = new HttpHeaders();
-        headers.add("location", "api/v1/customer/" + savedCustomer.getId().toString());
+        headers.add("location", Constants.CUSTOMER_URL +  savedCustomer.getId().toString());
         return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
-    @PutMapping(value = {"{customerId}"})
+    @PutMapping(value = {Constants.CUSTOMER_URL_ID})
     public ResponseEntity<Customer> updateCustomer(@PathVariable("customerId") UUID id, @RequestBody Customer customer){
         service.updateCustomerById(id, customer);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @DeleteMapping(value = {"{customerId}"})
+    @DeleteMapping(value = {Constants.CUSTOMER_URL_ID})
     public ResponseEntity<Customer> deleteCustomerById(@PathVariable("customerId") UUID id) {
         service.deleteCustomerById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PatchMapping(value = {"{customerId}"})
+    @PatchMapping(value = {Constants.CUSTOMER_URL_ID})
     public ResponseEntity<Customer> patchCustomerById(@PathVariable("customerId") UUID id, @RequestBody Customer customer) {
     service.patchCustomerById(id, customer);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
 
 }
