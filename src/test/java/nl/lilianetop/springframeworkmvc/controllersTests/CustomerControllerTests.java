@@ -2,6 +2,7 @@ package nl.lilianetop.springframeworkmvc.controllersTests;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import nl.lilianetop.springframeworkmvc.controllers.CustomerController;
+import nl.lilianetop.springframeworkmvc.exceptions.ExceptionNotFound;
 import nl.lilianetop.springframeworkmvc.models.Customer;
 import nl.lilianetop.springframeworkmvc.services.CustomerService;
 import nl.lilianetop.springframeworkmvc.services.CustomerServiceImpl;
@@ -26,6 +27,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -153,6 +155,13 @@ public class CustomerControllerTests {
         Assertions.assertEquals(uuidArgumentCaptor.getValue(), testCustomer.getId());
 
         assertThat(uuidArgumentCaptor.getValue()).isEqualTo(testCustomer.getId());
+    }
+    @Test
+    void customerNotFoundException() throws Exception {
+        when(service.getCustomerById(any(UUID.class))).thenThrow(ExceptionNotFound.class);
+
+        mockMvc.perform(get(Constants.CUSTOMER_URL_ID, UUID.randomUUID()))
+                .andExpect(status().isNotFound());
     }
 
 }
