@@ -17,8 +17,7 @@ import java.util.UUID;
 public class Beer {
 
     @Id
-    @GeneratedValue(generator =  "sequence-generator")
-    @GenericGenerator(name = "sequence-generator" )
+    @GeneratedValue(generator =  "UUID", strategy = GenerationType.AUTO)
     @Column(length=36, columnDefinition = "varchar", updatable = false, nullable = false)
     private UUID id;
     @Version
