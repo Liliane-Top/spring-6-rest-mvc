@@ -1,13 +1,13 @@
 package nl.lilianetop.springframeworkmvc.services;
 
-import nl.lilianetop.springframeworkmvc.models.Beer;
+import nl.lilianetop.springframeworkmvc.models.BeerDto;
 
 import java.util.List;
 import java.util.UUID;
 
 public interface BeerService {
 
-    List<Beer> listBeers();
+    List<BeerDto> listBeers();
 
-    Beer getBeerById(UUID id);
+    BeerDto getBeerById(UUID id);
 }

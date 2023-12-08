@@ -3,7 +3,7 @@ package nl.lilianetop.springframeworkmvc.controllersTests;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import nl.lilianetop.springframeworkmvc.controllers.CustomerController;
 import nl.lilianetop.springframeworkmvc.exceptions.ExceptionNotFound;
-import nl.lilianetop.springframeworkmvc.models.Customer;
+import nl.lilianetop.springframeworkmvc.models.CustomerDto;
 import nl.lilianetop.springframeworkmvc.services.CustomerService;
 import nl.lilianetop.springframeworkmvc.services.CustomerServiceImpl;
 import nl.lilianetop.springframeworkmvc.utils.Constants;
@@ -49,7 +49,7 @@ public class CustomerControllerTests {
     ArgumentCaptor<UUID> uuidArgumentCaptor;
 
     @Captor
-    ArgumentCaptor<Customer> customerArgumentCaptor;
+    ArgumentCaptor<CustomerDto> customerArgumentCaptor;
 
     @BeforeEach
     void setUp() {
@@ -72,7 +72,7 @@ public class CustomerControllerTests {
 
     @Test
     void call_customerById() throws Exception {
-        Customer testCustomer = customerService.listCustomers().get(0);
+        CustomerDto testCustomer = customerService.listCustomers().get(0);
 
         given(service.getCustomerById(testCustomer.getId())).willReturn(testCustomer);
 
@@ -86,11 +86,11 @@ public class CustomerControllerTests {
 
     @Test
     void call_createAndSaveCustomer() throws Exception {
-        Customer testCustomer = customerService.listCustomers().get(0);
+        CustomerDto testCustomer = customerService.listCustomers().get(0);
         testCustomer.setId(null);
         testCustomer.setVersion(null);
 
-        given(service.createAndSaveCustomer(any(Customer.class))).willReturn(customerService.listCustomers().get(1));
+        given(service.createAndSaveCustomer(any(CustomerDto.class))).willReturn(customerService.listCustomers().get(1));
 
         mockMvc.perform(post(Constants.CUSTOMER_URL)
                 .accept(MediaType.APPLICATION_JSON)
@@ -103,7 +103,7 @@ public class CustomerControllerTests {
 
     @Test
     void call_updateCustomer() throws Exception {
-        Customer testCustomer = customerService.listCustomers().get(0);
+        CustomerDto testCustomer = customerService.listCustomers().get(0);
         mockMvc.perform(put(Constants.CUSTOMER_URL_ID, testCustomer.getId())
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -118,7 +118,7 @@ public class CustomerControllerTests {
 
     @Test
     void call_patchCustomer() throws Exception {
-        Customer testCustomer = customerService.listCustomers().get(0);
+        CustomerDto testCustomer = customerService.listCustomers().get(0);
 
         Map<String, Object> updatedMap = new HashMap<>();
         //The key of this map MUST be exactly the same as the field you want to update.
@@ -142,7 +142,7 @@ public class CustomerControllerTests {
 
     @Test
     void call_deleteCustomer() throws Exception{
-        Customer testCustomer = customerService.listCustomers().get(0);
+        CustomerDto testCustomer = customerService.listCustomers().get(0);
 
         mockMvc.perform(delete(Constants.CUSTOMER_URL_ID, testCustomer.getId())
                 .accept(MediaType.APPLICATION_JSON))

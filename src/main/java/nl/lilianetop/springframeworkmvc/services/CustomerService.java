@@ -1,20 +1,20 @@
 package nl.lilianetop.springframeworkmvc.services;
 
-import nl.lilianetop.springframeworkmvc.models.Customer;
+import nl.lilianetop.springframeworkmvc.models.CustomerDto;
 
 import java.util.List;
 import java.util.UUID;
 
 public interface CustomerService {
 
-    Customer getCustomerById(UUID id);
-    List<Customer> listCustomers();
+    CustomerDto getCustomerById(UUID id);
+    List<CustomerDto> listCustomers();
 
-    Customer createAndSaveCustomer(Customer customer);
+    CustomerDto createAndSaveCustomer(CustomerDto customer);
 
-    void updateCustomerById(UUID id, Customer customer);
+    void updateCustomerById(UUID id, CustomerDto customer);
 
     void deleteCustomerById(UUID id);
 
-    void patchCustomerById(UUID id, Customer customer);
+    void patchCustomerById(UUID id, CustomerDto customer);
 }
