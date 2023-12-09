@@ -82,8 +82,8 @@ public class BeerServiceImpl implements BeerService {
     }
 
     @Override
-    public void deleteById(UUID id) {
-
+    public Boolean deleteById(UUID id) {
+        return true;
     }
 
     @Override

@@ -14,7 +14,6 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -29,6 +28,31 @@ class BeerControllerIT {
     @Autowired
     BeerMapper beerMapper;
 
+    @Test
+    void deleteBeerNotFound() {
+        assertThrows(ExceptionNotFound.class, () -> {
+            beerController.deleteBeerById(UUID.randomUUID());
+        });
+    }
+
+    @Transactional
+    @Rollback
+    @Test
+    void deleteBeer() {
+        Beer beer = beerRepository.findAll().get(0);
+        ResponseEntity<BeerDto> responseEntity = beerController.deleteBeerById(beer.getId());
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.valueOf(204));
+        assertThat(beerRepository.findById(beer.getId())).isEmpty();
+    }
+    @Transactional
+    @Rollback
+    @Test
+    void updateBeerNotFound() {
+        assertThrows(ExceptionNotFound.class, () ->
+                beerController.updateBeer(UUID.randomUUID(), BeerDto.builder().build()));
+    }
+    @Transactional
+    @Rollback
     @Test
     void updateBeer() {
         Beer beer = beerRepository.findAll().get(0);

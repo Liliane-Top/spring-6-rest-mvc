@@ -49,4 +49,11 @@ public class BeerController {
         }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+    @DeleteMapping(value = BEER_URL_ID)
+    public ResponseEntity<BeerDto> deleteBeerById(@PathVariable("beerId") UUID id) {
+        if(!beerService.deleteById(id)) {
+            throw new ExceptionNotFound();
+        };
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }

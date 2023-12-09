@@ -1,6 +1,7 @@
 package nl.lilianetop.springframeworkmvc.services;
 
 import lombok.RequiredArgsConstructor;
+import nl.lilianetop.springframeworkmvc.exceptions.ExceptionNotFound;
 import nl.lilianetop.springframeworkmvc.mappers.BeerMapper;
 import nl.lilianetop.springframeworkmvc.models.BeerDto;
 import nl.lilianetop.springframeworkmvc.repositories.BeerRepository;
@@ -57,8 +58,12 @@ public class BeerServiceJPA implements BeerService {
     }
 
     @Override
-    public void deleteById(UUID id) {
-
+    public Boolean deleteById(UUID id) {
+       if(beerRepository.existsById(id)){
+           beerRepository.deleteById(id);
+           return true;
+       }
+       return false;
     }
 
     @Override
