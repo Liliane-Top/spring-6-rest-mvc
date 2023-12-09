@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import nl.lilianetop.springframeworkmvc.exceptions.ExceptionNotFound;
 import nl.lilianetop.springframeworkmvc.models.CustomerDto;
 import nl.lilianetop.springframeworkmvc.services.CustomerService;
-import nl.lilianetop.springframeworkmvc.utils.Constants;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,19 +42,25 @@ public class CustomerController {
     }
     @PutMapping(value = {CUSTOMER_URL_ID})
     public ResponseEntity<CustomerDto> updateCustomer(@PathVariable("customerId") UUID id, @RequestBody CustomerDto customer){
-        service.updateCustomerById(id, customer);
+        if(service.updateCustomerById(id, customer).isEmpty()){
+            throw new ExceptionNotFound();
+        }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping(value = {CUSTOMER_URL_ID})
     public ResponseEntity<CustomerDto> deleteCustomerById(@PathVariable("customerId") UUID id) {
-        service.deleteCustomerById(id);
+        if(!service.deleteCustomerById(id)) {
+            throw  new ExceptionNotFound();
+        }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PatchMapping(value = {CUSTOMER_URL_ID})
     public ResponseEntity<CustomerDto> patchCustomerById(@PathVariable("customerId") UUID id, @RequestBody CustomerDto customer) {
-    service.patchCustomerById(id, customer);
+    if(service.patchCustomerById(id, customer).isEmpty()){
+        throw new ExceptionNotFound();
+    }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

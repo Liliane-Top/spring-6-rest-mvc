@@ -7,6 +7,7 @@ import nl.lilianetop.springframeworkmvc.models.BeerDto;
 import nl.lilianetop.springframeworkmvc.repositories.BeerRepository;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Optional;
@@ -67,7 +68,27 @@ public class BeerServiceJPA implements BeerService {
     }
 
     @Override
-    public void patchBeerById(UUID id, BeerDto beer) {
+    public Optional<BeerDto> patchBeerById(UUID id, BeerDto beerDto) {
+        AtomicReference<Optional<BeerDto>> atomicReference = new AtomicReference<>();
 
+        beerRepository.findById(id).ifPresentOrElse( foundBeer -> {
+                    if(StringUtils.hasText(beerDto.getBeerName())) {
+                        foundBeer.setBeerName(beerDto.getBeerName());
+                    }
+                    if(beerDto.getBeerStyle() != null) {
+                        foundBeer.setBeerStyle(beerDto.getBeerStyle());
+                    }
+                    if(StringUtils.hasText(beerDto.getUpc())) {
+                        foundBeer.setUpc(beerDto.getUpc());
+                    }
+                    if(beerDto.getPrice() != null) {
+                        foundBeer.setPrice(beerDto.getPrice());
+                    }
+                    if(beerDto.getQuantityOnHand() != null) {
+                        foundBeer.setQuantityOnHand(beerDto.getQuantityOnHand());
+                    }
+                    atomicReference.set(Optional.of(beerMapper.beerToBeerDto(foundBeer)));
+        }, () -> atomicReference.set(Optional.empty()));
+        return atomicReference.get();
     }
 }

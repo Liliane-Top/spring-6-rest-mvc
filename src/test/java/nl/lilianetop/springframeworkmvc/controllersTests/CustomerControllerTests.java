@@ -74,7 +74,6 @@ public class CustomerControllerTests {
     @Test
     void call_customerById() throws Exception {
         CustomerDto testCustomer = customerService.listCustomers().get(0);
-
         given(service.getCustomerById(testCustomer.getId())).willReturn(Optional.of(testCustomer));
 
         mockMvc.perform(get(Constants.CUSTOMER_URL_ID, testCustomer.getId())
@@ -105,6 +104,8 @@ public class CustomerControllerTests {
     @Test
     void call_updateCustomer() throws Exception {
         CustomerDto testCustomer = customerService.listCustomers().get(0);
+        given(service.updateCustomerById(any(UUID.class), any(CustomerDto.class))).willReturn(Optional.ofNullable(testCustomer));
+
         mockMvc.perform(put(Constants.CUSTOMER_URL_ID, testCustomer.getId())
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -120,6 +121,7 @@ public class CustomerControllerTests {
     @Test
     void call_patchCustomer() throws Exception {
         CustomerDto testCustomer = customerService.listCustomers().get(0);
+        given(service.patchCustomerById(any(UUID.class), any(CustomerDto.class))).willReturn(Optional.ofNullable(testCustomer));
 
         Map<String, Object> updatedMap = new HashMap<>();
         //The key of this map MUST be exactly the same as the field you want to update.
@@ -144,6 +146,7 @@ public class CustomerControllerTests {
     @Test
     void call_deleteCustomer() throws Exception{
         CustomerDto testCustomer = customerService.listCustomers().get(0);
+        given(service.deleteCustomerById(any(UUID.class))).willReturn(true);
 
         mockMvc.perform(delete(Constants.CUSTOMER_URL_ID, testCustomer.getId())
                 .accept(MediaType.APPLICATION_JSON))

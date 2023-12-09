@@ -30,9 +30,7 @@ class BeerControllerIT {
 
     @Test
     void deleteBeerNotFound() {
-        assertThrows(ExceptionNotFound.class, () -> {
-            beerController.deleteBeerById(UUID.randomUUID());
-        });
+        assertThrows(ExceptionNotFound.class, () -> beerController.deleteBeerById(UUID.randomUUID()));
     }
 
     @Transactional
@@ -97,7 +95,7 @@ class BeerControllerIT {
 
     @Test
     void getBeerByIdNotFound() {
-        assertThrows(ExceptionNotFound.class, () -> { beerController.getBeerById(UUID.randomUUID());});
+        assertThrows(ExceptionNotFound.class, () -> beerController.getBeerById(UUID.randomUUID()));
     }
 
     @Test

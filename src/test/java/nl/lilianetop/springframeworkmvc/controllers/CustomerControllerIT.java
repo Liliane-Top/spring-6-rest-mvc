@@ -7,6 +7,8 @@ import nl.lilianetop.springframeworkmvc.repositories.CustomerRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,5 +49,66 @@ class CustomerControllerIT {
     void getCustomerByIdNotFound() {
         assertThrows(ExceptionNotFound.class, () ->
                 customerController.getCustomerById(UUID.randomUUID()));
+    }
+
+    @Transactional
+    @Rollback
+    @Test
+    void saveNewCustomer() {
+        CustomerDto customerDto = CustomerDto.builder().customerName("Erika").build();
+        ResponseEntity<CustomerDto> responseEntity = customerController.createAndSaveCustomer(customerDto);
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        String[] urlPAth = responseEntity.getHeaders().getLocation().getPath().split("/");
+        UUID uuid = UUID.fromString(urlPAth[4]);
+        assertThat(customerRepository.findById(uuid)).isNotNull();
+
+    }
+    @Transactional
+    @Rollback
+    @Test
+    void getUpdateById() {
+        Customer customer = customerRepository.findAll().get(0);
+        CustomerDto customerDto = CustomerDto.builder().customerName("Valerie").build();
+        customerController.updateCustomer(customer.getId(), customerDto);
+
+        assertThat(customer.getCustomerName()).isEqualTo("Valerie");
+    }
+
+    @Test
+    void updateCustomerNotFound() {
+        assertThrows(ExceptionNotFound.class, ()-> customerController.updateCustomer(UUID.randomUUID(), CustomerDto.builder().build()));
+    }
+
+
+    @Transactional
+    @Rollback
+    @Test
+    void deleteById() {
+        Customer customer = customerRepository.findAll().get(0);
+        ResponseEntity<CustomerDto> responseEntity = customerController.deleteCustomerById(customer.getId());
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+        assertThat(customerRepository.findById(customer.getId())).isEmpty();
+    }
+
+    @Test
+    void deleteCustomerNotFound() {
+        assertThrows(ExceptionNotFound.class, () -> customerController.deleteCustomerById(UUID.randomUUID()));
+    }
+    @Transactional
+    @Rollback
+    @Test
+    void patchCustomer() {
+        Customer customer = customerRepository.findAll().get(0);
+        CustomerDto customerDto = CustomerDto.builder().customerName("Maaike").build();
+        ResponseEntity<CustomerDto> responseEntity = customerController.patchCustomerById(customer.getId(), customerDto );
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.valueOf(204));
+        assertThat(customer.getCustomerName()).isEqualTo("Maaike");
+
+    }
+
+    @Test
+    void patchCustomerNotFound() {
+        assertThrows(ExceptionNotFound.class, () ->
+                customerController.patchCustomerById(UUID.randomUUID(), CustomerDto.builder().build()));
     }
 }

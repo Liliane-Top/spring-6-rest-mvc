@@ -87,7 +87,7 @@ public class BeerServiceImpl implements BeerService {
     }
 
     @Override
-    public void patchBeerById(UUID id, BeerDto beer) {
-
+    public Optional<BeerDto> patchBeerById(UUID id, BeerDto beerDto) {
+        return Optional.ofNullable(null);
     }
 }
