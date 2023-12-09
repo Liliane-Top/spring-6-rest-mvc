@@ -6,10 +6,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
+
 @Service
 @Slf4j
 public class CustomerServiceImpl implements CustomerService {
@@ -48,10 +46,9 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public CustomerDto getCustomerById(UUID id) {
+    public Optional<CustomerDto> getCustomerById(UUID id) {
         log.debug("Get Customer by Id - in service. Id: " + id.toString());
-
-        return customerMap.get(id);
+        return Optional.of(customerMap.get(id));
     }
 
     @Override
@@ -74,22 +71,25 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void updateCustomerById(UUID id, CustomerDto customer) {
+    public Optional<CustomerDto> updateCustomerById(UUID id, CustomerDto customer) {
         CustomerDto existing =  customerMap.get(id);
         existing.setCustomerName(customer.getCustomerName());
+        return Optional.of(existing);
     }
 
     @Override
-    public void deleteCustomerById(UUID id) {
+    public Boolean deleteCustomerById(UUID id) {
         customerMap.remove(id);
+        return true;
     }
 
     @Override
-    public void patchCustomerById(UUID id, CustomerDto customer) {
+    public Optional<CustomerDto> patchCustomerById(UUID id, CustomerDto customer) {
         CustomerDto existing = customerMap.get(id);
 
         if(StringUtils.hasText( customer.getCustomerName())) {
             existing.setCustomerName(customer.getCustomerName());
         }
+        return Optional.of(existing);
     }
 }
