@@ -1,7 +1,6 @@
 package nl.lilianetop.springframeworkmvc.services;
 
 import lombok.RequiredArgsConstructor;
-import nl.lilianetop.springframeworkmvc.exceptions.ExceptionNotFound;
 import nl.lilianetop.springframeworkmvc.mappers.BeerMapper;
 import nl.lilianetop.springframeworkmvc.models.BeerDto;
 import nl.lilianetop.springframeworkmvc.repositories.BeerRepository;

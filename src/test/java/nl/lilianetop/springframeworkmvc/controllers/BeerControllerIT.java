@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -66,6 +67,29 @@ class BeerControllerIT {
         Beer updatedBeer = beerRepository.findAll().get(0);
         assertThat(updatedBeer.getBeerName()).isEqualTo(updatedName);
 
+    }
+    @Rollback
+    @Transactional
+    @Test
+    void patchBeer() {
+        Beer beer = beerRepository.findAll().get(0);
+        BeerDto beerDto = beerMapper.beerToBeerDto(beer);
+        beerDto.setId(null);
+        beerDto.setVersion(null);
+        beerDto.setPrice(BigDecimal.valueOf(14.98));
+        beerDto.setQuantityOnHand(786);
+
+        ResponseEntity<BeerDto> responseEntity = beerController.patchBeerById(beer.getId(), beerDto);
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+
+        Beer updatedBeer = beerRepository.findAll().get(0);
+       assertThat(updatedBeer.getPrice()).isEqualTo(BigDecimal.valueOf(14.98));
+       assertThat(updatedBeer.getQuantityOnHand()).isEqualTo(786);
+    }
+
+    @Test
+    void patchBeerNotFound() {
+        assertThrows(ExceptionNotFound.class, () -> beerController.patchBeerById(UUID.randomUUID(), BeerDto.builder().build()));
     }
 
     @Rollback

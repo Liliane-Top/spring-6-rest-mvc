@@ -56,4 +56,12 @@ public class BeerController {
         };
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @PatchMapping(value = BEER_URL_ID)
+    public ResponseEntity<BeerDto> patchBeerById(@PathVariable("beerId") UUID id, @RequestBody BeerDto beerDto) {
+        if(beerService.patchBeerById(id, beerDto).isEmpty()){
+            throw new ExceptionNotFound();
+        }
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }
