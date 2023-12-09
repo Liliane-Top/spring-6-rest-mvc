@@ -2,6 +2,7 @@ package nl.lilianetop.springframeworkmvc.controllers;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import nl.lilianetop.springframeworkmvc.exceptions.ExceptionNotFound;
 import nl.lilianetop.springframeworkmvc.models.CustomerDto;
 import nl.lilianetop.springframeworkmvc.services.CustomerService;
 import nl.lilianetop.springframeworkmvc.utils.Constants;
@@ -28,7 +29,7 @@ public class CustomerController {
     @GetMapping(value = Constants.CUSTOMER_URL_ID)
     public CustomerDto getCustomerById(@PathVariable(value = "customerId") UUID customerId){
         log.debug("Get Customer by id - in controller");
-        return service.getCustomerById(customerId);
+        return service.getCustomerById(customerId).orElseThrow(ExceptionNotFound::new);
     }
 
     @PostMapping(value = Constants.CUSTOMER_URL)

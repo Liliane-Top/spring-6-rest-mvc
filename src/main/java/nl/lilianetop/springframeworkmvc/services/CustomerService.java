@@ -3,11 +3,12 @@ package nl.lilianetop.springframeworkmvc.services;
 import nl.lilianetop.springframeworkmvc.models.CustomerDto;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface CustomerService {
 
-    CustomerDto getCustomerById(UUID id);
+    Optional<CustomerDto> getCustomerById(UUID id);
     List<CustomerDto> listCustomers();
 
     CustomerDto createAndSaveCustomer(CustomerDto customer);

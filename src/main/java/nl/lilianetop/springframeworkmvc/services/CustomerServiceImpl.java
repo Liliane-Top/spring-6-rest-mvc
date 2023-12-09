@@ -1,15 +1,14 @@
 package nl.lilianetop.springframeworkmvc.services;
 
 import lombok.extern.slf4j.Slf4j;
+import nl.lilianetop.springframeworkmvc.exceptions.ExceptionNotFound;
 import nl.lilianetop.springframeworkmvc.models.CustomerDto;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
+
 @Service
 @Slf4j
 public class CustomerServiceImpl implements CustomerService {
@@ -48,10 +47,9 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public CustomerDto getCustomerById(UUID id) {
+    public Optional<CustomerDto> getCustomerById(UUID id) {
         log.debug("Get Customer by Id - in service. Id: " + id.toString());
-
-        return customerMap.get(id);
+        return Optional.of(Optional.ofNullable(customerMap.get(id)).orElseThrow(ExceptionNotFound::new));
     }
 
     @Override

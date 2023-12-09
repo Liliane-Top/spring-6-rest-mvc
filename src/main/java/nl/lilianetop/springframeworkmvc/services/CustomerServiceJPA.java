@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -21,10 +22,10 @@ public class CustomerServiceJPA implements CustomerService {
     private final CustomerMapper customerMapper;
 
     @Override
-    public CustomerDto getCustomerById(UUID id) {
-        return customerRepository.findById(id)
+    public Optional<CustomerDto> getCustomerById(UUID id) {
+        return Optional.ofNullable(customerRepository.findById(id)
                 .map(customerMapper::customerToCustomerDto)
-                .orElseThrow(ExceptionNotFound::new);
+                .orElseThrow(ExceptionNotFound::new));
     }
 
     @Override
