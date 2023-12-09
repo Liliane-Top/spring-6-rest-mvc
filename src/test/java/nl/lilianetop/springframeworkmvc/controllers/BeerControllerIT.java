@@ -2,15 +2,19 @@ package nl.lilianetop.springframeworkmvc.controllers;
 
 import nl.lilianetop.springframeworkmvc.domain.Beer;
 import nl.lilianetop.springframeworkmvc.exceptions.ExceptionNotFound;
+import nl.lilianetop.springframeworkmvc.mappers.BeerMapper;
 import nl.lilianetop.springframeworkmvc.models.BeerDto;
 import nl.lilianetop.springframeworkmvc.repositories.BeerRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -22,6 +26,43 @@ class BeerControllerIT {
     BeerController beerController;
     @Autowired
     BeerRepository beerRepository;
+    @Autowired
+    BeerMapper beerMapper;
+
+    @Test
+    void updateBeer() {
+        Beer beer = beerRepository.findAll().get(0);
+        BeerDto beerDto = beerMapper.beerToBeerDto(beer);
+        beerDto.setId(null);
+        beerDto.setVersion(null);
+        final String updatedName = "Updated";
+        beerDto.setBeerName(updatedName);
+
+        ResponseEntity<BeerDto> responseEntity = beerController.updateBeer(beer.getId(), beerDto);
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+
+        Beer updatedBeer = beerRepository.findAll().get(0);
+        assertThat(updatedBeer.getBeerName()).isEqualTo(updatedName);
+
+    }
+
+    @Rollback
+    @Transactional
+    @Test
+    void saveNewBeer() {
+        BeerDto beerDto = BeerDto.builder().beerName("Lager").build();
+        ResponseEntity<BeerDto> responseEntity = beerController.createAndSaveBeer(beerDto);
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.valueOf(201));
+        assertThat(responseEntity.getHeaders().getLocation()).isNotNull();
+        System.out.println(responseEntity.getHeaders().getLocation().getPath());
+        String[] UUIDLocations = responseEntity.getHeaders().getLocation().getPath().split("/");
+
+        UUID savedUuid = UUID.fromString(UUIDLocations[4]);
+
+        Beer beer = beerRepository.findById(savedUuid).get();
+        assertThat(beer).isNotNull();
+    }
 
     @Test
     void getBeerById() {

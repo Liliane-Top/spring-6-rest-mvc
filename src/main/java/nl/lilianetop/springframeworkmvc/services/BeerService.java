@@ -1,6 +1,5 @@
 package nl.lilianetop.springframeworkmvc.services;
 
-import nl.lilianetop.springframeworkmvc.domain.Beer;
 import nl.lilianetop.springframeworkmvc.models.BeerDto;
 
 import java.util.List;
@@ -13,7 +12,7 @@ public interface BeerService {
 
     Optional<BeerDto> getBeerById(UUID id);
     BeerDto saveNewBeer(BeerDto beer);
-    BeerDto updateBeerById(UUID id);
+    Optional<BeerDto> updateBeerById(UUID id, BeerDto beer);
     void deleteById(UUID id);
     void patchBeerById(UUID id, BeerDto beer);
 

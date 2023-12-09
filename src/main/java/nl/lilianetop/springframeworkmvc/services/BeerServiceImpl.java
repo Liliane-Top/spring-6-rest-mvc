@@ -77,7 +77,7 @@ public class BeerServiceImpl implements BeerService {
     }
 
     @Override
-    public BeerDto updateBeerById(UUID id){
+    public Optional<BeerDto> updateBeerById(UUID id, BeerDto beer) {
         return null;
     }
 
