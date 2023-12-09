@@ -64,10 +64,30 @@ public class BeerServiceImpl implements BeerService {
     }
 
     @Override
-    public BeerDto getBeerById(UUID id) {
+    public Optional<BeerDto> getBeerById(UUID id) {
 
         log.debug("Get Beer by Id - in service. Id: " + id.toString());
 
-        return beerMap.get(id);
+        return Optional.ofNullable(beerMap.get(id));
+    }
+
+    @Override
+    public BeerDto saveNewBeer(BeerDto beer){
+        return null;
+    }
+
+    @Override
+    public BeerDto updateBeerById(UUID id){
+        return null;
+    }
+
+    @Override
+    public void deleteById(UUID id) {
+
+    }
+
+    @Override
+    public void patchBeerById(UUID id, BeerDto beer) {
+
     }
 }
