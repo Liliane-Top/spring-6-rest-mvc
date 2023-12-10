@@ -1,5 +1,6 @@
 package nl.lilianetop.springframeworkmvc.controllersTests;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import nl.lilianetop.springframeworkmvc.controllers.BeerController;
 import nl.lilianetop.springframeworkmvc.models.BeerDto;
@@ -71,10 +72,45 @@ class BeerControllerTests {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(beerDto)))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.length()", is(2)))
+                .andExpect(jsonPath("$.length()", is(6)))
                 .andReturn();
 
 //        System.out.println(result.getResponse().getContentAsString());
+    }
+
+    @Test
+    void testCreateBeerWithValidation() throws Exception {
+        BeerDto beerDto = BeerDto.builder().build();
+        when(beerService.saveNewBeer(any())).thenReturn(beerServiceImpl.listBeers().get(1));
+
+        MvcResult result = mockMvc.perform(post(BEER_URL)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(beerDto)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.length()", is(6)))
+                .andReturn();
+
+                System.out.println(result.getResponse().getContentAsString());
+
+    }
+
+    @Test
+    void testUpdateBeerWithBlankName() throws Exception {
+        BeerDto beerDto = beerServiceImpl.listBeers().get(1);
+        beerDto.setBeerName("");
+        when(beerService.updateBeerById(any(), any())).thenReturn(Optional.of(beerDto));
+
+        MvcResult result = mockMvc.perform(put(BEER_URL_ID, beerDto.getId())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(beerDto)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.length()", is(1)))
+                .andReturn();
+
+        System.out.println(result.getResponse().getContentAsString());
+
     }
 
     @Test
