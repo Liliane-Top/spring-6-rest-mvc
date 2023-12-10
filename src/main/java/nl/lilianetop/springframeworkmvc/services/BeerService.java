@@ -9,7 +9,6 @@ import java.util.UUID;
 public interface BeerService {
 
     List<BeerDto> listBeers();
-
     Optional<BeerDto> getBeerById(UUID id);
     BeerDto saveNewBeer(BeerDto beer);
     Optional<BeerDto> updateBeerById(UUID id, BeerDto beer);

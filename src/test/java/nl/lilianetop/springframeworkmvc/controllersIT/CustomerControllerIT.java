@@ -1,5 +1,6 @@
-package nl.lilianetop.springframeworkmvc.controllers;
+package nl.lilianetop.springframeworkmvc.controllersIT;
 
+import nl.lilianetop.springframeworkmvc.controllers.CustomerController;
 import nl.lilianetop.springframeworkmvc.domain.Customer;
 import nl.lilianetop.springframeworkmvc.exceptions.ExceptionNotFound;
 import nl.lilianetop.springframeworkmvc.models.CustomerDto;
