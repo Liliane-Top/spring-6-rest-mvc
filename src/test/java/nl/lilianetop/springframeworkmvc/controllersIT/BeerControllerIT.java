@@ -1,5 +1,6 @@
-package nl.lilianetop.springframeworkmvc.controllers;
+package nl.lilianetop.springframeworkmvc.controllersIT;
 
+import nl.lilianetop.springframeworkmvc.controllers.BeerController;
 import nl.lilianetop.springframeworkmvc.domain.Beer;
 import nl.lilianetop.springframeworkmvc.exceptions.ExceptionNotFound;
 import nl.lilianetop.springframeworkmvc.mappers.BeerMapper;
@@ -50,6 +51,8 @@ class BeerControllerIT {
         assertThrows(ExceptionNotFound.class, () ->
                 beerController.updateBeer(UUID.randomUUID(), BeerDto.builder().build()));
     }
+
+
     @Transactional
     @Rollback
     @Test

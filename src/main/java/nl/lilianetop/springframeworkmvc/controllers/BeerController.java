@@ -8,6 +8,7 @@ import nl.lilianetop.springframeworkmvc.services.BeerService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -36,14 +37,14 @@ public class BeerController {
     }
 
     @PostMapping(value = BEER_URL )
-    public ResponseEntity<BeerDto> createAndSaveBeer(@RequestBody BeerDto newBeer) {
+    public ResponseEntity<BeerDto> createAndSaveBeer(@Validated @RequestBody BeerDto newBeer) {
        BeerDto savedBeer = beerService.saveNewBeer(newBeer);
         HttpHeaders headers = new HttpHeaders();
         headers.add("location", BEER_URL + savedBeer.getId().toString());
         return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
     @PutMapping(value = BEER_URL_ID)
-    public ResponseEntity<BeerDto> updateBeer(@PathVariable("beerId") UUID id, @RequestBody BeerDto beerDto) {
+    public ResponseEntity<BeerDto> updateBeer(@PathVariable("beerId") UUID id, @Validated @RequestBody BeerDto beerDto) {
         if(beerService.updateBeerById(id, beerDto).isEmpty()){
             throw new ExceptionNotFound();
         }
