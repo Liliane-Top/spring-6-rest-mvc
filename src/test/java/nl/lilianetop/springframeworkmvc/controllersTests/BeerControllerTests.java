@@ -1,12 +1,10 @@
 package nl.lilianetop.springframeworkmvc.controllersTests;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import nl.lilianetop.springframeworkmvc.controllers.BeerController;
 import nl.lilianetop.springframeworkmvc.models.BeerDto;
 import nl.lilianetop.springframeworkmvc.services.BeerService;
 import nl.lilianetop.springframeworkmvc.services.BeerServiceImpl;
-import nl.lilianetop.springframeworkmvc.services.BeerServiceJPA;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -28,7 +26,6 @@ import static nl.lilianetop.springframeworkmvc.utils.Constants.BEER_URL_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
