@@ -1,6 +1,7 @@
 package nl.lilianetop.springframeworkmvc.controllers;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -11,6 +12,11 @@ import java.util.Map;
 
 @ControllerAdvice
 public class CustomErrorController {
+
+    @ExceptionHandler(TransactionSystemException.class)
+    ResponseEntity handleJPAViolations(TransactionSystemException exception) {
+        return ResponseEntity.badRequest().build();
+    }
     @ExceptionHandler(MethodArgumentNotValidException.class)
     ResponseEntity handleBindErrors(MethodArgumentNotValidException exception) {
         List errorList =exception.getFieldErrors().stream()
