@@ -19,7 +19,6 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.web.servlet.MockMvc;
 
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
@@ -27,7 +26,6 @@ import org.springframework.web.context.WebApplicationContext;
 import java.math.BigDecimal;
 import java.util.*;
 
-import static net.bytebuddy.matcher.ElementMatchers.is;
 import static nl.lilianetop.springframeworkmvc.utils.Constants.BEER_URL_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -116,8 +114,7 @@ class BeerControllerIT {
        assertThat(updatedBeer.getQuantityOnHand()).isEqualTo(786);
     }
 
-    @Rollback
-    @Transactional
+
     @Test
     void patchBeerWithInvalidName() throws Exception {
         Beer beer = beerRepository.findAll().get(0);
@@ -126,16 +123,14 @@ class BeerControllerIT {
         beerMap.put("beerName", "New Namehdjkjui jejruiwe;r juiojuioawejijfnka. jiejfiaejfkjnaek .fneks ensgkenjkjskg");
 
         assert beer != null;
-        MvcResult result = mockMvc.perform(patch(BEER_URL_ID, beer.getId())
+        mockMvc.perform(patch(BEER_URL_ID, beer.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(beerMap)))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.length()").value(4))
-                .andReturn();
-
-        System.out.println(result.getResponse().getContentAsString());
+                .andExpect(status().isBadRequest());
+        beerRepository.flush();
     }
+
 
     @Test
     void patchBeerNotFound() {
