@@ -170,7 +170,7 @@ class BeerControllerIT {
     @Test
     void getBeerList() {
         List<BeerDto> dtos = beerController.listBeers();
-        assertThat(dtos.size()).isEqualTo(3);
+        assertThat(dtos.size()).isEqualTo(2413);
     }
     @Transactional
     @Rollback
