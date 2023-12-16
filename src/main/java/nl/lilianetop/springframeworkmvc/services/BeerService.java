@@ -4,11 +4,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import nl.lilianetop.springframeworkmvc.models.BeerDto;
-import org.springframework.stereotype.Service;
+import nl.lilianetop.springframeworkmvc.models.BeerStyle;
 
 public interface BeerService {
 
-  List<BeerDto> listBeers();
+  List<BeerDto> listBeers(String beerName, BeerStyle beerStyle, Boolean showInventory);
 
   Optional<BeerDto> getBeerById(UUID id);
 

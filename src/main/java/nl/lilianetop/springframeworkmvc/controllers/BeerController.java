@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import nl.lilianetop.springframeworkmvc.exceptions.ExceptionNotFound;
 import nl.lilianetop.springframeworkmvc.models.BeerDto;
+import nl.lilianetop.springframeworkmvc.models.BeerStyle;
 import nl.lilianetop.springframeworkmvc.services.BeerService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -26,8 +27,10 @@ public class BeerController {
     private final BeerService beerService;
 
     @GetMapping(value = BEER_URL)
-    public List<BeerDto> listBeers(){
-        return beerService.listBeers();
+    public List<BeerDto> listBeers(@RequestParam(required = false) String beerName,
+        @RequestParam(required = false) BeerStyle beerStyle,
+        @RequestParam(required = false) Boolean showInventory){
+      return beerService.listBeers(beerName, beerStyle, showInventory);
     }
 
     @GetMapping(value = BEER_URL_ID)
@@ -54,7 +57,7 @@ public class BeerController {
     public ResponseEntity<BeerDto> deleteBeerById(@PathVariable("beerId") UUID id) {
         if(!beerService.deleteById(id)) {
             throw new ExceptionNotFound();
-        };
+        }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
