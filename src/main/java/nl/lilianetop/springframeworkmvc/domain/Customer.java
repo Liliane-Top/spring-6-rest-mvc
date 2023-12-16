@@ -6,7 +6,6 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
-import java.sql.SQLType;
 import java.time.LocalDateTime;
 import java.util.UUID;
 @Getter
@@ -24,7 +23,10 @@ public class Customer {
     private UUID id;
     @Version
     private Integer version;
+
+    @Column
+    private String email;
     private String customerName;
     private LocalDateTime createdDate;
-    private LocalDateTime lastModifiedDate;
+    private LocalDateTime updateDate;
 }
