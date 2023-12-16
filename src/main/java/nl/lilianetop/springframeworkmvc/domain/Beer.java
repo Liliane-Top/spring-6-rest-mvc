@@ -6,8 +6,10 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import nl.lilianetop.springframeworkmvc.models.BeerStyle;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
@@ -43,8 +45,9 @@ public class Beer {
     private Integer quantityOnHand;
     @NotNull
     private BigDecimal price;
-    private LocalDateTime createdDate;
-    private LocalDateTime updateDate;
+
+    @CreationTimestamp private LocalDateTime createdDate;
+    @UpdateTimestamp private LocalDateTime updateDate;
 
 
 }

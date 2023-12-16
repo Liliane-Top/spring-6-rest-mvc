@@ -2,8 +2,10 @@ package nl.lilianetop.springframeworkmvc.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDateTime;
@@ -27,6 +29,6 @@ public class Customer {
     @Column
     private String email;
     private String customerName;
-    private LocalDateTime createdDate;
-    private LocalDateTime updateDate;
+    @CreationTimestamp private LocalDateTime createdDate;
+    @UpdateTimestamp private LocalDateTime updateDate;
 }
