@@ -122,8 +122,8 @@ class BeerControllerIT {
             .queryParam("showInventory", "true"))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.content.length()", is(25)))
-        .andExpect(jsonPath("$.content.[0].quantityOnHand").value(29))
-        .andExpect(jsonPath("$.content.[5].quantityOnHand").value(61));
+        .andExpect(jsonPath("$.content.[0].quantityOnHand").value(1907))
+        .andExpect(jsonPath("$.content.[5].quantityOnHand").value(830));
   }
 
   @Transactional

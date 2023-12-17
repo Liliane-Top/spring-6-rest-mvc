@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -51,9 +52,6 @@ public class BeerServiceJPA implements BeerService {
     }
 
     return beerPage.map(beerMapper::beerToBeerDto);
-//    return beerPage.stream()
-//        .map(beerMapper::beerToBeerDto)
-//        .toList();
   }
 
   private PageRequest buildPageRequest(Integer pageNumber, Integer pageSize) {
@@ -74,7 +72,9 @@ public class BeerServiceJPA implements BeerService {
       pageSizeRequest = pageSize;
     }
 
-    return PageRequest.of(pageNumberRequest, pageSizeRequest);
+//    Sort sort = Sort.by("beerName").ascending();
+    Sort sort = Sort.by(Sort.Order.asc("beerName"));
+    return PageRequest.of(pageNumberRequest, pageSizeRequest, sort);
 
   }
 
