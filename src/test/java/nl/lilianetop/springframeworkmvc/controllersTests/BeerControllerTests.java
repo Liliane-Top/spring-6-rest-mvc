@@ -57,7 +57,8 @@ class BeerControllerTests {
     @Test
     void testCreateBeerWithoutBeerName() throws Exception {
         BeerDto beerDto = BeerDto.builder().build();
-        when(beerService.saveNewBeer(any())).thenReturn(beerServiceImpl.listBeers(null, null, false).get(1));
+        when(beerService.saveNewBeer(any())).thenReturn(beerServiceImpl.listBeers(null, null, false,
+            1, 25).getContent().get(0));
 
         MvcResult result = mockMvc.perform(post(BEER_URL)
                 .accept(MediaType.APPLICATION_JSON)
@@ -73,7 +74,8 @@ class BeerControllerTests {
     @Test
     void testCreateBeerWithValidation() throws Exception {
         BeerDto beerDto = BeerDto.builder().build();
-        when(beerService.saveNewBeer(any())).thenReturn(beerServiceImpl.listBeers(null, null, false).get(1));
+        when(beerService.saveNewBeer(any())).thenReturn(beerServiceImpl.listBeers(null, null, false,
+            1, 25).getContent().get(0));
 
         MvcResult result = mockMvc.perform(post(BEER_URL)
                         .accept(MediaType.APPLICATION_JSON)
@@ -89,7 +91,9 @@ class BeerControllerTests {
 
     @Test
     void testUpdateBeerWithBlankName() throws Exception {
-        BeerDto beerDto = beerServiceImpl.listBeers(null, null, false).get(1);
+        BeerDto beerDto = beerServiceImpl
+            .listBeers(null, null, false, 1, 25)
+            .getContent().get(0);
         beerDto.setBeerName("");
         when(beerService.updateBeerById(any(), any())).thenReturn(Optional.of(beerDto));
 
@@ -107,7 +111,9 @@ class BeerControllerTests {
 
     @Test
     void testPatchBeer() throws Exception {
-        BeerDto beer = beerServiceImpl.listBeers(null, null, false).get(0);
+        BeerDto beer = beerServiceImpl
+            .listBeers(null, null, false, 1, 25)
+            .getContent().get(0);
 
         Map<String, Object> beerMap = new HashMap<>();
         beerMap.put("beerName", "New Name");
