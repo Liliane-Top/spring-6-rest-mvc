@@ -1,6 +1,8 @@
 package nl.lilianetop.springframeworkmvc.domain;
 
 import jakarta.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
@@ -28,7 +30,17 @@ public class Customer {
 
     @Column
     private String email;
+
     private String customerName;
-    @CreationTimestamp private LocalDateTime createdDate;
-    @UpdateTimestamp private LocalDateTime updateDate;
+
+    @CreationTimestamp
+    @Column(updatable = false)
+    private LocalDateTime createdDate;
+
+    @UpdateTimestamp
+    private LocalDateTime updateDate;
+
+    @Builder.Default
+    @OneToMany(mappedBy = "customer")
+    private Set<BeerOrder> beerOrders = new HashSet<>();
 }
