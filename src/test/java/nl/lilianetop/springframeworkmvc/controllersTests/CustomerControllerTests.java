@@ -1,6 +1,7 @@
 package nl.lilianetop.springframeworkmvc.controllersTests;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import nl.lilianetop.springframeworkmvc.config.SpringSecurityConfig;
 import nl.lilianetop.springframeworkmvc.controllers.CustomerController;
 import nl.lilianetop.springframeworkmvc.exceptions.ExceptionNotFound;
 import nl.lilianetop.springframeworkmvc.models.CustomerDto;
@@ -15,6 +16,7 @@ import org.mockito.Captor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -33,6 +35,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(CustomerController.class)
+@Import(SpringSecurityConfig.class)
 public class CustomerControllerTests {
 
     @Autowired

@@ -5,6 +5,7 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 import lombok.RequiredArgsConstructor;
 import nl.lilianetop.springframeworkmvc.domain.Beer;
+import nl.lilianetop.springframeworkmvc.exceptions.ExceptionNotFound;
 import nl.lilianetop.springframeworkmvc.mappers.BeerMapper;
 import nl.lilianetop.springframeworkmvc.models.BeerDto;
 import nl.lilianetop.springframeworkmvc.models.BeerStyle;
@@ -96,7 +97,8 @@ public class BeerServiceJPA implements BeerService {
 
   @Override
   public Optional<BeerDto> getBeerById(UUID id) {
-    return Optional.ofNullable(beerMapper.beerToBeerDto(beerRepository.findById(id).orElse(null)));
+    return Optional.ofNullable(beerMapper.beerToBeerDto(beerRepository.findById(id)
+        .orElseThrow(ExceptionNotFound::new)));
   }
 
   @Override
