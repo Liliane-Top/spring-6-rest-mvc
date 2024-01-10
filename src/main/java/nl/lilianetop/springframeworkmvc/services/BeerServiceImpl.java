@@ -1,6 +1,7 @@
 package nl.lilianetop.springframeworkmvc.services;
 
 import lombok.extern.slf4j.Slf4j;
+import nl.lilianetop.springframeworkmvc.exceptions.ExceptionNotFound;
 import nl.lilianetop.springframeworkmvc.models.BeerDto;
 import nl.lilianetop.springframeworkmvc.models.BeerStyle;
 import org.springframework.data.domain.Page;
