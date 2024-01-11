@@ -20,10 +20,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class CustomerControllerIT {
+
     @Autowired
     CustomerController customerController;
+
     @Autowired
     CustomerRepository customerRepository;
+
     @Transactional
     @Rollback
     @Test

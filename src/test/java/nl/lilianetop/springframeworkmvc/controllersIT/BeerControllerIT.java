@@ -1,10 +1,14 @@
 package nl.lilianetop.springframeworkmvc.controllersIT;
 
+import static nl.lilianetop.springframeworkmvc.Constants.PASSWORD;
+import static nl.lilianetop.springframeworkmvc.Constants.USER;
 import static nl.lilianetop.springframeworkmvc.utils.Constants.BEER_URL;
 import static nl.lilianetop.springframeworkmvc.utils.Constants.BEER_URL_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -53,14 +57,29 @@ class BeerControllerIT {
 
   MockMvc mockMvc;
 
+
   @BeforeEach
   void setUp() {
-    mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
+    mockMvc = MockMvcBuilders.webAppContextSetup(wac)
+        .apply(springSecurity())
+        .build();
+  }
+
+  @Test
+  void getBeersWithoutAuthorization() throws Exception {
+    mockMvc.perform(get(BEER_URL)
+        .queryParam("beerName", "IPA")
+        .queryParam("beerStyle", BeerStyle.IPA.name())
+        .queryParam("showInventory", "true")
+        .queryParam("pageNumber", "2")
+        .queryParam("pageSize", "50"))
+        .andExpect(status().isUnauthorized());
   }
 
   @Test
   void listBeersByStyleAndNameShowInventoryTruePage2() throws Exception {
     mockMvc.perform(get(BEER_URL)
+            .with(httpBasic(USER, PASSWORD))
             .queryParam("beerName", "IPA")
             .queryParam("beerStyle", BeerStyle.IPA.name())
             .queryParam("showInventory", "true")
@@ -79,6 +98,7 @@ class BeerControllerIT {
   @Test
   void beerListByBeerStyle() throws Exception {
     mockMvc.perform(get(BEER_URL)
+            .with(httpBasic(USER, PASSWORD))
             .queryParam("beerStyle", BeerStyle.IPA.name()))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.content.length()", is(25)));
@@ -88,6 +108,7 @@ class BeerControllerIT {
   @Test
   void beerListByName() throws Exception {
     mockMvc.perform(get(BEER_URL)
+            .with(httpBasic(USER, PASSWORD))
             .queryParam("beerName", "%IPA%"))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.content.length()", is(25)));
@@ -96,6 +117,7 @@ class BeerControllerIT {
   @Test
   void beerListByNameAndByBeerStyle() throws Exception {
     mockMvc.perform(get(BEER_URL)
+            .with(httpBasic(USER, PASSWORD))
             .queryParam("beerName", "%IPA%")
             .queryParam("beerStyle", BeerStyle.IPA.name()))
         .andExpect(status().isOk())
@@ -105,6 +127,7 @@ class BeerControllerIT {
   @Test
   void beerListByNameByStyleByInventoryFalse() throws Exception {
     mockMvc.perform(get(BEER_URL)
+            .with(httpBasic(USER, PASSWORD))
             .queryParam("beerName", "IPA")
             .queryParam("beerStyle", BeerStyle.IPA.name())
             .queryParam("showInventory", "false"))
@@ -117,6 +140,7 @@ class BeerControllerIT {
   @Test
   void beerListByNameByStyleByInventoryTrue() throws Exception {
     mockMvc.perform(get(BEER_URL)
+            .with(httpBasic(USER, PASSWORD))
             .queryParam("beerName", "%IPA%")
             .queryParam("beerStyle", BeerStyle.IPA.name())
             .queryParam("showInventory", "true"))
@@ -191,15 +215,18 @@ class BeerControllerIT {
     Map<String, Object> beerMap = new HashMap<>();
     beerMap.put("beerName",
         "New Namehdjkjui jejruiwe;r juiojuioawejijfnka. jiejfiaejfkjnaek .fneks ensgkenjkjskg");
+    //FIXME: returns a 403 ipv 400
 
     assert beer != null;
     mockMvc.perform(patch(BEER_URL_ID, beer.getId())
+            .with(httpBasic(USER, PASSWORD))
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(beerMap)))
         .andExpect(status().isBadRequest());
-    beerRepository.flush();
+//    beerRepository.flush();
   }
+
 
 
   @Test
