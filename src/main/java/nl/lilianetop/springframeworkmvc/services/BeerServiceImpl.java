@@ -1,8 +1,7 @@
 package nl.lilianetop.springframeworkmvc.services;
 
 import lombok.extern.slf4j.Slf4j;
-import nl.lilianetop.springframeworkmvc.exceptions.ExceptionNotFound;
-import nl.lilianetop.springframeworkmvc.models.BeerDto;
+import nl.lilianetop.springframeworkmvc.models.BeerDTO;
 import nl.lilianetop.springframeworkmvc.models.BeerStyle;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -11,17 +10,20 @@ import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @Slf4j
 public class BeerServiceImpl implements BeerService {
-    private final Map<UUID, BeerDto> beerMap;
+    private final Map<UUID, BeerDTO> beerMap;
 
     public BeerServiceImpl() {
         this.beerMap = new HashMap<>();
 
-        BeerDto beer1 = BeerDto.builder()
+        BeerDTO beer1 = BeerDTO.builder()
                 .id(UUID.randomUUID())
                 .version(1)
                 .beerName("Galaxy Cat")
@@ -33,7 +35,7 @@ public class BeerServiceImpl implements BeerService {
                 .updateDate(LocalDateTime.now())
                 .build();
 
-        BeerDto beer2 = BeerDto.builder()
+        BeerDTO beer2 = BeerDTO.builder()
                 .id(UUID.randomUUID())
                 .version(1)
                 .beerName("Crank")
@@ -45,7 +47,7 @@ public class BeerServiceImpl implements BeerService {
                 .updateDate(LocalDateTime.now())
                 .build();
 
-        BeerDto beer3 = BeerDto.builder()
+        BeerDTO beer3 = BeerDTO.builder()
                 .id(UUID.randomUUID())
                 .version(1)
                 .beerName("Sunshine City")
@@ -63,22 +65,22 @@ public class BeerServiceImpl implements BeerService {
     }
 
     @Override
-    public Page<BeerDto> listBeers(String beerName, BeerStyle beerStyle, Boolean showInventory,
-        Integer pageNumber, Integer pageSize){
+    public Page<BeerDTO> listBeers(String beerName, BeerStyle beerStyle, Boolean showInventory,
+                                   Integer pageNumber, Integer pageSize) {
         return new PageImpl<>(beerMap.values().stream().toList());
     }
 
     @Override
-    public Optional<BeerDto> getBeerById(UUID id) {
+    public Optional<BeerDTO> getBeerById(UUID id) {
         log.debug("Get Beer by Id - in service. Id: " + id.toString());
         return Optional.ofNullable(beerMap.get(id));
     }
 
     @Override
-    public Optional<BeerDto> patchBeerById(UUID beerId, BeerDto beer) {
-        BeerDto existing = beerMap.get(beerId);
+    public Optional<BeerDTO> patchBeerById(UUID beerId, BeerDTO beer) {
+        BeerDTO existing = beerMap.get(beerId);
 
-        if (StringUtils.hasText(beer.getBeerName())){
+        if (StringUtils.hasText(beer.getBeerName())) {
             existing.setBeerName(beer.getBeerName());
         }
 
@@ -90,7 +92,7 @@ public class BeerServiceImpl implements BeerService {
             existing.setPrice(beer.getPrice());
         }
 
-        if (beer.getQuantityOnHand() != null){
+        if (beer.getQuantityOnHand() != null) {
             existing.setQuantityOnHand(beer.getQuantityOnHand());
         }
 
@@ -109,8 +111,8 @@ public class BeerServiceImpl implements BeerService {
     }
 
     @Override
-    public Optional<BeerDto> updateBeerById(UUID beerId, BeerDto beer) {
-        BeerDto existing = beerMap.get(beerId);
+    public Optional<BeerDTO> updateBeerById(UUID beerId, BeerDTO beer) {
+        BeerDTO existing = beerMap.get(beerId);
         existing.setBeerName(beer.getBeerName());
         existing.setPrice(beer.getPrice());
         existing.setUpc(beer.getUpc());
@@ -119,9 +121,9 @@ public class BeerServiceImpl implements BeerService {
     }
 
     @Override
-    public BeerDto saveNewBeer(BeerDto beer) {
+    public BeerDTO saveNewBeer(BeerDTO beer) {
 
-        BeerDto savedBeer = BeerDto.builder()
+        BeerDTO savedBeer = BeerDTO.builder()
                 .id(UUID.randomUUID())
                 .version(1)
                 .createdDate(LocalDateTime.now())

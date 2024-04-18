@@ -1,24 +1,25 @@
 package nl.lilianetop.springframeworkmvc.services;
 
-import java.util.Optional;
-import java.util.UUID;
-import nl.lilianetop.springframeworkmvc.models.BeerDto;
+import nl.lilianetop.springframeworkmvc.models.BeerDTO;
 import nl.lilianetop.springframeworkmvc.models.BeerStyle;
 import org.springframework.data.domain.Page;
 
+import java.util.Optional;
+import java.util.UUID;
+
 public interface BeerService {
 
-  Page<BeerDto> listBeers(String beerName, BeerStyle beerStyle, Boolean showInventory,
-      Integer pageNumber, Integer pageSize);
+    Page<BeerDTO> listBeers(String beerName, BeerStyle beerStyle, Boolean showInventory,
+                            Integer pageNumber, Integer pageSize);
 
-  Optional<BeerDto> getBeerById(UUID id);
+    Optional<BeerDTO> getBeerById(UUID id);
 
-  BeerDto saveNewBeer(BeerDto beer);
+    BeerDTO saveNewBeer(BeerDTO beer);
 
-  Optional<BeerDto> updateBeerById(UUID id, BeerDto beer);
+    Optional<BeerDTO> updateBeerById(UUID id, BeerDTO beer);
 
-  Boolean deleteById(UUID id);
+    Boolean deleteById(UUID id);
 
-  Optional<BeerDto> patchBeerById(UUID id, BeerDto beer);
+    Optional<BeerDTO> patchBeerById(UUID id, BeerDTO beer);
 
 }

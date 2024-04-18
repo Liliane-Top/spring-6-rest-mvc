@@ -9,9 +9,10 @@ import lombok.Data;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
+
 @Data
 @Builder
-public class BeerDto {
+public class BeerDTO {
 
     private UUID id;
     private Integer version;
@@ -25,7 +26,7 @@ public class BeerDto {
     @NotBlank
     private String upc;
     private Integer quantityOnHand;
-    @DecimalMin(value="0.0", inclusive = false)
+    @DecimalMin(value = "0.0", inclusive = false)
     @NotNull
     private BigDecimal price;
     private LocalDateTime createdDate;

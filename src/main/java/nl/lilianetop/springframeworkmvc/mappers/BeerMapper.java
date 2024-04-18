@@ -1,11 +1,12 @@
 package nl.lilianetop.springframeworkmvc.mappers;
 
 import nl.lilianetop.springframeworkmvc.domain.Beer;
-import nl.lilianetop.springframeworkmvc.models.BeerDto;
+import nl.lilianetop.springframeworkmvc.models.BeerDTO;
 import org.mapstruct.Mapper;
 
 @Mapper
 public interface BeerMapper {
-    Beer beerDtoToBeer(BeerDto beerDto);
-    BeerDto beerToBeerDto(Beer beer);
+    Beer beerDtoToBeer(BeerDTO beerDto);
+
+    BeerDTO beerToBeerDto(Beer beer);
 }

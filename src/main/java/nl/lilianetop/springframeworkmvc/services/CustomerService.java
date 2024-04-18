@@ -1,6 +1,6 @@
 package nl.lilianetop.springframeworkmvc.services;
 
-import nl.lilianetop.springframeworkmvc.models.CustomerDto;
+import nl.lilianetop.springframeworkmvc.models.CustomerDTO;
 
 import java.util.List;
 import java.util.Optional;
@@ -8,14 +8,15 @@ import java.util.UUID;
 
 public interface CustomerService {
 
-    Optional<CustomerDto> getCustomerById(UUID id);
-    List<CustomerDto> listCustomers();
+    Optional<CustomerDTO> getCustomerById(UUID id);
 
-    CustomerDto createAndSaveCustomer(CustomerDto customer);
+    List<CustomerDTO> listCustomers();
 
-    Optional<CustomerDto> updateCustomerById(UUID id, CustomerDto customer);
+    CustomerDTO createAndSaveCustomer(CustomerDTO customer);
+
+    Optional<CustomerDTO> updateCustomerById(UUID id, CustomerDTO customer);
 
     Boolean deleteCustomerById(UUID id);
 
-    Optional<CustomerDto> patchCustomerById(UUID id, CustomerDto customer);
+    Optional<CustomerDTO> patchCustomerById(UUID id, CustomerDTO customer);
 }

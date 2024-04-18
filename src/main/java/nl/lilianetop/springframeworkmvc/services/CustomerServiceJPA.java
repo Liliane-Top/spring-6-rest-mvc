@@ -3,7 +3,7 @@ package nl.lilianetop.springframeworkmvc.services;
 import lombok.RequiredArgsConstructor;
 import nl.lilianetop.springframeworkmvc.exceptions.ExceptionNotFound;
 import nl.lilianetop.springframeworkmvc.mappers.CustomerMapper;
-import nl.lilianetop.springframeworkmvc.models.CustomerDto;
+import nl.lilianetop.springframeworkmvc.models.CustomerDTO;
 import nl.lilianetop.springframeworkmvc.repositories.CustomerRepository;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
@@ -23,14 +23,14 @@ public class CustomerServiceJPA implements CustomerService {
     private final CustomerMapper customerMapper;
 
     @Override
-    public Optional<CustomerDto> getCustomerById(UUID id) {
+    public Optional<CustomerDTO> getCustomerById(UUID id) {
         return Optional.ofNullable(customerRepository.findById(id)
                 .map(customerMapper::customerToCustomerDto)
                 .orElseThrow(ExceptionNotFound::new));
     }
 
     @Override
-    public List<CustomerDto> listCustomers() {
+    public List<CustomerDTO> listCustomers() {
         return customerRepository.findAll()
                 .stream()
                 .map(customerMapper::customerToCustomerDto)
@@ -38,13 +38,13 @@ public class CustomerServiceJPA implements CustomerService {
     }
 
     @Override
-    public CustomerDto createAndSaveCustomer(CustomerDto customerDto) {
+    public CustomerDTO createAndSaveCustomer(CustomerDTO customerDto) {
         return customerMapper.customerToCustomerDto(customerRepository.save(customerMapper.customerDtoToCustomer(customerDto)));
     }
 
     @Override
-    public Optional<CustomerDto> updateCustomerById(UUID id, CustomerDto customerDto) {
-        AtomicReference<Optional<CustomerDto>> atomicReference = new AtomicReference<>();
+    public Optional<CustomerDTO> updateCustomerById(UUID id, CustomerDTO customerDto) {
+        AtomicReference<Optional<CustomerDTO>> atomicReference = new AtomicReference<>();
         customerRepository.findById(id).ifPresentOrElse(
                 customer -> {
                     customer.setCustomerName(customerDto.getCustomerName());
@@ -56,7 +56,7 @@ public class CustomerServiceJPA implements CustomerService {
 
     @Override
     public Boolean deleteCustomerById(UUID id) {
-        if(customerRepository.existsById(id)) {
+        if (customerRepository.existsById(id)) {
             customerRepository.deleteById(id);
             return true;
         }
@@ -64,12 +64,12 @@ public class CustomerServiceJPA implements CustomerService {
     }
 
     @Override
-    public Optional<CustomerDto> patchCustomerById(UUID id, CustomerDto customerDto) {
-        AtomicReference<Optional<CustomerDto>> atomicReference = new AtomicReference<>();
+    public Optional<CustomerDTO> patchCustomerById(UUID id, CustomerDTO customerDto) {
+        AtomicReference<Optional<CustomerDTO>> atomicReference = new AtomicReference<>();
         customerRepository.findById(id).ifPresentOrElse(
 
                 customer -> {
-                    if(StringUtils.hasText(customer.getCustomerName())){
+                    if (StringUtils.hasText(customer.getCustomerName())) {
                         customer.setCustomerName(customerDto.getCustomerName());
                     }
                     atomicReference.set(Optional.of(customerMapper.customerToCustomerDto(customerRepository.save(customer))));
