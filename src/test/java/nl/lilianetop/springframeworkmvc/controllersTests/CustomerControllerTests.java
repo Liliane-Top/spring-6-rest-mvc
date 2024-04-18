@@ -26,6 +26,7 @@ import java.util.UUID;
 
 import static nl.lilianetop.springframeworkmvc.Constants.PASSWORD;
 import static nl.lilianetop.springframeworkmvc.Constants.USER;
+import static nl.lilianetop.springframeworkmvc.controllersTests.BeerControllerTests.jwtRequestPostProcessor;
 import static nl.lilianetop.springframeworkmvc.utils.Constants.CUSTOMER_URL;
 import static nl.lilianetop.springframeworkmvc.utils.Constants.CUSTOMER_URL_ID;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -70,7 +71,7 @@ public class CustomerControllerTests {
         given(service.listCustomers()).willReturn(customerService.listCustomers());
 
         mockMvc.perform(get(CUSTOMER_URL)
-                        .with(httpBasic(USER, PASSWORD))
+                        .with(jwtRequestPostProcessor)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -85,7 +86,7 @@ public class CustomerControllerTests {
         given(service.getCustomerById(testCustomer.getId())).willReturn(Optional.of(testCustomer));
 
         mockMvc.perform(get(CUSTOMER_URL_ID, testCustomer.getId())
-                        .with(httpBasic(USER, PASSWORD))
+                        .with(jwtRequestPostProcessor)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -103,7 +104,7 @@ public class CustomerControllerTests {
                 customerService.listCustomers().get(1));
 
         mockMvc.perform(post(CUSTOMER_URL)
-                        .with(httpBasic(USER, PASSWORD))
+                        .with(jwtRequestPostProcessor)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(testCustomer)))
@@ -119,7 +120,7 @@ public class CustomerControllerTests {
                 Optional.ofNullable(testCustomer));
 
         mockMvc.perform(put(CUSTOMER_URL_ID, testCustomer.getId())
-                        .with(httpBasic(USER, PASSWORD))
+                        .with(jwtRequestPostProcessor)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(testCustomer)))
@@ -145,7 +146,7 @@ public class CustomerControllerTests {
         updatedMap.put("customerName", "updated name");
 
         mockMvc.perform(patch(CUSTOMER_URL_ID, testCustomer.getId())
-                        .with(httpBasic(USER, PASSWORD))
+                        .with(jwtRequestPostProcessor)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(updatedMap)))
@@ -166,7 +167,7 @@ public class CustomerControllerTests {
         given(service.deleteCustomerById(any(UUID.class))).willReturn(true);
 
         mockMvc.perform(delete(CUSTOMER_URL_ID, testCustomer.getId())
-                        .with(httpBasic(USER, PASSWORD))
+                        .with(jwtRequestPostProcessor)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
 
@@ -184,7 +185,7 @@ public class CustomerControllerTests {
         when(service.getCustomerById(any(UUID.class))).thenThrow(ExceptionNotFound.class);
 
         mockMvc.perform(get(CUSTOMER_URL_ID, UUID.randomUUID())
-                        .with(httpBasic(USER, PASSWORD)))
+                        .with(jwtRequestPostProcessor))
                 .andExpect(status().isNotFound());
     }
 

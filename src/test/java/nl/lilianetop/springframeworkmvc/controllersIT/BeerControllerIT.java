@@ -28,14 +28,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import static nl.lilianetop.springframeworkmvc.Constants.PASSWORD;
-import static nl.lilianetop.springframeworkmvc.Constants.USER;
+import static nl.lilianetop.springframeworkmvc.controllersTests.BeerControllerTests.jwtRequestPostProcessor;
 import static nl.lilianetop.springframeworkmvc.utils.Constants.BEER_URL;
 import static nl.lilianetop.springframeworkmvc.utils.Constants.BEER_URL_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
@@ -76,11 +74,10 @@ class BeerControllerIT {
                         .queryParam("pageSize", "50"))
                 .andExpect(status().isUnauthorized());
     }
-
     @Test
     void listBeersByStyleAndNameShowInventoryTruePage2() throws Exception {
         mockMvc.perform(get(BEER_URL)
-                        .with(httpBasic(USER, PASSWORD))
+                        .with(jwtRequestPostProcessor)
                         .queryParam("beerName", "IPA")
                         .queryParam("beerStyle", BeerStyle.IPA.name())
                         .queryParam("showInventory", "true")
@@ -99,7 +96,7 @@ class BeerControllerIT {
     @Test
     void beerListByBeerStyle() throws Exception {
         mockMvc.perform(get(BEER_URL)
-                        .with(httpBasic(USER, PASSWORD))
+                        .with(jwtRequestPostProcessor)
                         .queryParam("beerStyle", BeerStyle.IPA.name()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content.length()", is(25)));
@@ -109,7 +106,7 @@ class BeerControllerIT {
     @Test
     void beerListByName() throws Exception {
         mockMvc.perform(get(BEER_URL)
-                        .with(httpBasic(USER, PASSWORD))
+                        .with(jwtRequestPostProcessor)
                         .queryParam("beerName", "%IPA%"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content.length()", is(25)));
@@ -118,7 +115,7 @@ class BeerControllerIT {
     @Test
     void beerListByNameAndByBeerStyle() throws Exception {
         mockMvc.perform(get(BEER_URL)
-                        .with(httpBasic(USER, PASSWORD))
+                        .with(jwtRequestPostProcessor)
                         .queryParam("beerName", "%IPA%")
                         .queryParam("beerStyle", BeerStyle.IPA.name()))
                 .andExpect(status().isOk())
@@ -128,7 +125,7 @@ class BeerControllerIT {
     @Test
     void beerListByNameByStyleByInventoryFalse() throws Exception {
         mockMvc.perform(get(BEER_URL)
-                        .with(httpBasic(USER, PASSWORD))
+                        .with(jwtRequestPostProcessor)
                         .queryParam("beerName", "IPA")
                         .queryParam("beerStyle", BeerStyle.IPA.name())
                         .queryParam("showInventory", "false"))
@@ -141,7 +138,7 @@ class BeerControllerIT {
     @Test
     void beerListByNameByStyleByInventoryTrue() throws Exception {
         mockMvc.perform(get(BEER_URL)
-                        .with(httpBasic(USER, PASSWORD))
+                        .with(jwtRequestPostProcessor)
                         .queryParam("beerName", "%IPA%")
                         .queryParam("beerStyle", BeerStyle.IPA.name())
                         .queryParam("showInventory", "true"))
@@ -169,7 +166,6 @@ class BeerControllerIT {
                 beerController.updateBeer(UUID.randomUUID(), BeerDTO.builder().build()));
     }
 
-
     @Transactional
     @Rollback
     @Test
@@ -186,7 +182,6 @@ class BeerControllerIT {
 
         Beer updatedBeer = beerRepository.findAll().get(0);
         assertThat(updatedBeer.getBeerName()).isEqualTo(updatedName);
-
     }
 
     @Rollback
@@ -216,11 +211,9 @@ class BeerControllerIT {
         Map<String, Object> beerMap = new HashMap<>();
         beerMap.put("beerName",
                 "New Namehdjkjui jejruiwe;r juiojuioawejijfnka. jiejfiaejfkjnaek .fneks ensgkenjkjskg");
-        //FIXME: returns a 403 ipv 400
-
         assert beer != null;
         mockMvc.perform(patch(BEER_URL_ID, beer.getId())
-                        .with(httpBasic(USER, PASSWORD))
+                        .with(jwtRequestPostProcessor)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(beerMap)))
@@ -247,8 +240,8 @@ class BeerControllerIT {
         System.out.println(responseEntity.getHeaders().getLocation().getPath());
         String[] UUIDLocations = responseEntity.getHeaders().getLocation().getPath().split("/");
 
-        UUID savedUuid = UUID.fromString(UUIDLocations[4]);
-
+        UUID savedUuid = UUID.fromString(UUIDLocations[3].substring(8));
+        System.out.println(savedUuid);
         Beer beer = beerRepository.findById(savedUuid).orElse(null);
         assertThat(beer).isNotNull();
     }
