@@ -64,8 +64,7 @@ class CustomerControllerIT {
         ResponseEntity<CustomerDTO> responseEntity = customerController.createAndSaveCustomer(customerDto);
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         String[] urlPath = responseEntity.getHeaders().getLocation().getPath().split("/");
-        System.out.println(urlPath[4]);
-        UUID uuid = UUID.fromString(urlPath[4]);
+        UUID uuid = UUID.fromString(urlPath[3].substring(8));
         assertThat(customerRepository.findById(uuid)).isNotNull();
 
     }

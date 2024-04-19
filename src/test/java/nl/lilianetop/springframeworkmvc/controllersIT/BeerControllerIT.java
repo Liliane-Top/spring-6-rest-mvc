@@ -240,7 +240,7 @@ class BeerControllerIT {
         System.out.println(responseEntity.getHeaders().getLocation().getPath());
         String[] UUIDLocations = responseEntity.getHeaders().getLocation().getPath().split("/");
 
-        UUID savedUuid = UUID.fromString(UUIDLocations[3].substring(8));
+        UUID savedUuid = UUID.fromString(UUIDLocations[3].substring(4));
         System.out.println(savedUuid);
         Beer beer = beerRepository.findById(savedUuid).orElse(null);
         assertThat(beer).isNotNull();
