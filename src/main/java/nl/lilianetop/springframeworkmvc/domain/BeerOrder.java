@@ -1,44 +1,36 @@
 package nl.lilianetop.springframeworkmvc.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Version;
-import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.type.SqlTypes;
 
+import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
+
 @Getter
 @Setter
 @Builder
 @Entity
+@AllArgsConstructor
 @NoArgsConstructor
 public class BeerOrder {
 
-  public BeerOrder(UUID id, Integer version, LocalDateTime createdDate, LocalDateTime updateDate,
-      String customerRef, Customer customer, Set<BeerOrderLine> beerOrderLines) {
-    this.id = id;
-    this.version = version;
-    this.createdDate = createdDate;
-    this.updateDate = updateDate;
-    this.customerRef = customerRef;
-    setCustomer(customer);
-    this.beerOrderLines = beerOrderLines;
-  }
+//  public BeerOrder(UUID id, Integer version, LocalDateTime createdDate, LocalDateTime updateDate,
+//      String customerRef, Customer customer, Set<BeerOrderLine> beerOrderLines) {
+//    this.id = id;
+//    this.version = version;
+//    this.createdDate = createdDate;
+//    this.updateDate = updateDate;
+//    this.customerRef = customerRef;
+//    setCustomer(customer);
+//    this.beerOrderLines = beerOrderLines;
+//  }
 //Override the lombok setter to create a bidirectional relationship between BeerOrder and Customer
   //do not forget to initialize the BeerOrders set inside the Customer object
   public void setCustomer(Customer customer) {

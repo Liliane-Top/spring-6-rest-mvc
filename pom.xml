@@ -17,6 +17,7 @@
         <java.version>17</java.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <lombok.version>1.18.30</lombok.version>
+        <spring-boot.run.profiles>localmysql</spring-boot.run.profiles>
     </properties>
     <dependencies>
         <dependency>
