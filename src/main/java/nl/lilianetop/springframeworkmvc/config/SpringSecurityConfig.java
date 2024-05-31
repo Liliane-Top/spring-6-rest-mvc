@@ -16,8 +16,10 @@ public class SpringSecurityConfig {
     @Bean
     @Order(1)
     public SecurityFilterChain actuatorSecurityFilterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(authorize -> authorize.requestMatchers(EndpointRequest.toAnyEndpoint()).permitAll());
-//            .csrf(AbstractHttpConfigurer::disable);
+//        http.authorizeHttpRequests(authorize -> authorize.requestMatchers(EndpointRequest.toAnyEndpoint()).permitAll());
+        //ALternative way of configuring the actuator with spring security
+        http.securityMatcher(EndpointRequest.toAnyEndpoint())
+                .authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll());
 
         return http.build();
     }
